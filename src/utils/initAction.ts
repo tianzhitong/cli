@@ -2,7 +2,7 @@
  * @Author: laotianwy 1695657342@qq.com
  * @Date: 2025-01-04 20:42:31
  * @LastEditors: laotianwy 1695657342@qq.com
- * @LastEditTime: 2025-01-04 22:56:12
+ * @LastEditTime: 2025-01-04 23:17:49
  * @FilePath: /cli/src/utils/initAction.ts
  * @Description: 检测git并且克隆项目
  */
@@ -16,6 +16,7 @@ import getParamsRepo from "./getParamsRepo";
 import { inquirerConfirm, inquirerInputs } from "./interactive";
 import changePackageJson from "./changePackageJson";
 import npmInstall from "./npmInstall";
+import autoOpenViscode from "./autoOpenViscode";
 // 当前脚本运行时的路径 + 路径分隔符 + 要创建的目录的名字
 // const currentPwdprojectNameDir = join(process.cwd() + sep + projectName);
 
@@ -74,6 +75,8 @@ const initAction = async (projectName: string, option: initActionOptionProps) =>
         await changePackageJson(projectName);
         // 下载依赖
         await npmInstall(projectName);
+        // 自动打开viscode
+        await autoOpenViscode(projectName)
     } catch (err) {
         console.log(logSymbols.error, err);
         shell.exit(1); // 下载失败直接退出

@@ -3,7 +3,6 @@ import figlet from 'figlet';
 import chalk from 'chalk';
 import { table } from 'table';
 import { program } from 'commander';
-// glob@7.2.3, inflight@1.0.6, rimraf@3.0.2
 import { CLI_NAME, CLI_VERSION, GIT_TEMPLATE_LIST } from './config/const';
 import logSymbols from './utils/logSymbols';
 import initAction from './utils/initAction';
@@ -32,7 +31,7 @@ program
             width: 80,
             whitespaceBreak: true
         })));
-        console.log(`\r\nRun ${chalk.cyan(`duyi-cli <command> --help`)} for detailed usage of given command\r\n`)
+        console.log(`\r\nRun ${chalk.cyan(`${CLI_NAME} <command> --help`)} for detailed usage of given command\r\n`)
     });
 
 program
