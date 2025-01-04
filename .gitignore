@@ -1,0 +1,5 @@
+# node_modules不提交
+node_modules/
+
+# 打包的文件不提交
+dist/
