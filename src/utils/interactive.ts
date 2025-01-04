@@ -2,7 +2,7 @@
  * @Author: laotianwy 1695657342@qq.com
  * @Date: 2025-01-04 20:53:06
  * @LastEditors: laotianwy 1695657342@qq.com
- * @LastEditTime: 2025-01-04 21:39:40
+ * @LastEditTime: 2025-01-04 22:04:31
  * @FilePath: /cli/src/utils/interactive.ts
  * @Description: 创建单独的模块处理交互相关代码
  */
@@ -38,4 +38,34 @@ export const inquirerChoose = async (message: string, choices: any, type: 'list'
         choices,
     });
     return answer;
+}
+
+
+/**
+ * @param {string} message 询问提示语句 
+ * @returns 输入结果
+ */
+export const inquirerInput = async (message: string) => {
+    const answer = await inquirer.prompt({
+        name: 'input',
+        type: 'input',
+        message
+    });
+    return answer
+}
+
+
+/*
+ * @param {Array} messages 询问提示语句数组 
+ * @returns {Object} 结果对象
+*/
+export const inquirerInputs = async (messages: any[]) => {
+    const answers = await inquirer.prompt(messages.map(msg => {
+        return {
+            name: msg.name,
+            type: 'input',
+            message: msg.message
+        }
+    }));
+    return answers
 }
