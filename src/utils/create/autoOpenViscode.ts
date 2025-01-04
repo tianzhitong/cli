@@ -8,7 +8,7 @@
  */
 import shell from "shelljs";
 import ora from "ora";
-import logSymbols from "./logSymbols";
+import logSymbols from "../common/logSymbols";
 import chalk from "chalk";
 
 

@@ -4,9 +4,9 @@ import chalk from 'chalk';
 import { table } from 'table';
 import { program } from 'commander';
 import { CLI_NAME, CLI_VERSION, GIT_TEMPLATE_LIST } from './config/const';
-import logSymbols from './utils/logSymbols';
-import initAction from './utils/initAction';
-import initPublish from './utils/initPublish';
+import logSymbols from './utils/common/logSymbols';
+import initPublish from './utils/publish/initPublish';
+import initAction from './utils/create/initAction';
 
 program.version(CLI_VERSION, '-v --version');
 
@@ -40,15 +40,14 @@ program
     .description('创建新项目')
     .option('-t, --template [template]', '输入模板名称创建项目')
     .option('-f, --force', '强制覆盖本地同名项目')
-    .option('-i, --ignore', '忽略项目相关描述,快速创建项目')
     .action(initAction);
 
 program
     .command('publish')
     .description('npm私服包发布')
     .option('-l, --left','修改最左边版本')
-    .option('-m, --middle','修改最左边版本')
-    .option('-r, --right','修改最左边版本')
+    .option('-m, --middle','修改中间版本')
+    .option('-r, --right','修改最右边版本')
     .action(initPublish)
 
 program

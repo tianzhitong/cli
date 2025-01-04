@@ -2,21 +2,21 @@
  * @Author: laotianwy 1695657342@qq.com
  * @Date: 2025-01-04 20:42:31
  * @LastEditors: laotianwy 1695657342@qq.com
- * @LastEditTime: 2025-01-04 23:17:49
+ * @LastEditTime: 2025-01-05 01:41:48
  * @FilePath: /cli/src/utils/initAction.ts
  * @Description: 检测git并且克隆项目
  */
 import shell from "shelljs";
 import chalk from "chalk";
 import fs from "fs-extra"
-import logSymbols from './logSymbols';
-import cloneRepo from "./cloneRepo";
-import removeDir from "./removeDir";
-import getParamsRepo from "./getParamsRepo";
-import { inquirerConfirm, inquirerInputs } from "./interactive";
-import changePackageJson from "./changePackageJson";
+import { inquirerConfirm, inquirerInputs } from "../common/interactive";
 import npmInstall from "./npmInstall";
 import autoOpenViscode from "./autoOpenViscode";
+import logSymbols from "../common/logSymbols";
+import cloneRepo from "./cloneRepo";
+import removeDir from "../common/removeDir";
+import getParamsRepo from "./getParamsRepo";
+import changePackageJson from "./changePackageJson";
 // 当前脚本运行时的路径 + 路径分隔符 + 要创建的目录的名字
 // const currentPwdprojectNameDir = join(process.cwd() + sep + projectName);
 

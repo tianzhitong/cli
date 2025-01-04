@@ -8,9 +8,9 @@
  */
 
 import chalk from "chalk";
-import { GIT_TEMPLATE_LIST, CLI_NAME } from "../config/const"
-import logSymbols from "./logSymbols";
-import { inquirerChoose } from "./interactive";
+import { GIT_TEMPLATE_LIST, CLI_NAME } from "../../config/const"
+import logSymbols from "../common/logSymbols";
+import { inquirerChoose } from "../common/interactive";
 
 /** 获取命令行参数的模板，如果没有，让用户选择一个模板 */
 const getParamsRepo = async (paramsChooseTemplateName?: string) => {

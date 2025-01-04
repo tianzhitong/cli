@@ -8,8 +8,8 @@
  */
 import fs from "fs-extra"
 import chalk from "chalk";
-import logSymbols from "../logSymbols";
-import { resolveApp } from "../removeDir";
+import logSymbols from "../common/logSymbols";
+import { resolveApp } from "../common/removeDir";
 import { initPublishProps } from "../initPublish";
 
 

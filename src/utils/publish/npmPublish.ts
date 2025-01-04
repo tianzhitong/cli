@@ -9,7 +9,7 @@
 import shell from "shelljs";
 import ora from "ora";
 import chalk from "chalk";
-import logSymbols from "../logSymbols";
+import logSymbols from "../common/logSymbols";
 
 
 const npmPublish = () => {
