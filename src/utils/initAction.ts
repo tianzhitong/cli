@@ -2,7 +2,7 @@
  * @Author: laotianwy 1695657342@qq.com
  * @Date: 2025-01-04 20:42:31
  * @LastEditors: laotianwy 1695657342@qq.com
- * @LastEditTime: 2025-01-04 21:24:32
+ * @LastEditTime: 2025-01-04 21:53:57
  * @FilePath: /cli/src/utils/initAction.ts
  * @Description: 检测git并且克隆项目
  */
@@ -11,8 +11,9 @@ import chalk from "chalk";
 import fs from "fs-extra"
 import logSymbols from './logSymbols.js';
 import cloneRepo from "./cloneRepo.js";
-import inquirerConfirm from "./interactive.js";
 import removeDir from "./removeDir.js";
+import getParamsRepo from "./getParamsRepo.js";
+import { inquirerConfirm } from "./interactive.js";
 
 const initAction = async (name: string, option: any) => {
     // 当前脚本运行时的路径 + 路径分隔符 + 要创建的目录的名字
@@ -25,6 +26,12 @@ const initAction = async (name: string, option: any) => {
     if (name.match(/[\u4E00-\u9FFF`~!@#$%&^*[\]()\\;:<.>/?]/g)) {
         console.log(logSymbols.error, chalk.redBright("对不起,项目名称存在非法字符"));
         return;
+    }
+
+    // 获取命令行参数的模板，如果没有，让用户选择一个模板
+    const chooseTemplate = await getParamsRepo(option.template);
+    if (!chooseTemplate) {
+        return
     }
 
     // 存在并且不强制删除。那么提出询问
@@ -45,7 +52,6 @@ const initAction = async (name: string, option: any) => {
         await removeDir(name);
     }
     // 克隆项目
-    console.log('name', name)
     await cloneRepo({
         remote: "yingside/vue-cli-template",
         fileName: name
