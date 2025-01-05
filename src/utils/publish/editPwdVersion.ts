@@ -2,7 +2,7 @@
  * @Author: laotianwy 1695657342@qq.com
  * @Date: 2025-01-05 00:20:13
  * @LastEditors: laotianwy 1695657342@qq.com
- * @LastEditTime: 2025-01-05 00:49:46
+ * @LastEditTime: 2025-01-05 16:53:03
  * @FilePath: /cli/src/utils/publish/editPwdVersion.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -10,14 +10,14 @@ import fs from "fs-extra"
 import chalk from "chalk";
 import logSymbols from "../common/logSymbols";
 import { resolveApp } from "../common/removeDir";
-import { initPublishProps } from "../initPublish";
+import { initPublishProps } from "./initPublish";
 
 
-const editPwdVersion = async (props: initPublishProps) => {
+const editPwdVersion = async (props: initPublishProps, version: string) => {
     const { left, middle, right } = props;
     const currentNodeRunDir = resolveApp(`./package.json`);
     const pkg = await fs.readJson(currentNodeRunDir);
-    const editVersion = ((pkg?.version ?? '') as string).trim();
+    const editVersion = version.trim();
     const editVersionList = editVersion.split('.')
 
     if (editVersion.length === 0) {
@@ -26,15 +26,15 @@ const editPwdVersion = async (props: initPublishProps) => {
     }
 
     if (left) {
-        pkg['version'] = [String(Number(editVersionList[0]) + 1),'0','0'].join('.');
+        pkg['version'] = [String(Number(editVersionList[0]) + 1), '0', '0'].join('.');
     }
 
     if (middle) {
-        pkg['version'] = [editVersionList[0],String(Number(editVersionList[1]) + 1),'0'].join('.');
+        pkg['version'] = [editVersionList[0], String(Number(editVersionList[1]) + 1), '0'].join('.');
     }
 
-    if((!left && !middle) || right) {
-        pkg['version'] = [editVersionList[0],editVersionList[1],String(Number(editVersionList[2]) + 1)].join('.');
+    if ((!left && !middle) || right) {
+        pkg['version'] = [editVersionList[0], editVersionList[1], String(Number(editVersionList[2]) + 1)].join('.');
     }
     await fs.writeJson(currentNodeRunDir, pkg, { spaces: 2 })
 }
