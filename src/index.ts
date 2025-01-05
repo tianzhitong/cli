@@ -1,4 +1,12 @@
 #!/usr/bin/env node
+/*
+ * @Author: laotianwy 1695657342@qq.com
+ * @Date: 2025-01-05 01:58:37
+ * @LastEditors: laotianwy 1695657342@qq.com
+ * @LastEditTime: 2025-01-05 22:08:47
+ * @FilePath: /cli/src/index.ts
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ */
 import figlet from 'figlet';
 import chalk from 'chalk';
 import { table } from 'table';
@@ -7,6 +15,7 @@ import { CLI_NAME, CLI_VERSION, GIT_TEMPLATE_LIST } from './config/const';
 import logSymbols from './utils/common/logSymbols';
 import initPublish from './utils/publish/initPublish';
 import initAction from './utils/create/initAction';
+import apiGenTs from './utils/apiGenTs';
 
 program.version(CLI_VERSION, '-v --version');
 
@@ -48,7 +57,13 @@ program
     .option('-l, --left','修改最左边版本')
     .option('-m, --middle','修改中间版本')
     .option('-r, --right','修改最右边版本')
-    .action(initPublish)
+    .action(initPublish);
+
+
+program
+    .command('apiGenTs')
+    .description('npm私服包发布')
+    .action(apiGenTs)
 
 program
     .command('list')
