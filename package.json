@@ -17,7 +17,8 @@
   },
   "files": [
     "/dist",
-    "README.md"
+    "README.md",
+    "apiGenTs.config.js"
   ],
   "keywords": [
     "tianzhitong",
