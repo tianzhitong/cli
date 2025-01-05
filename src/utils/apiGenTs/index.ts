@@ -2,7 +2,7 @@
  * @Author: laotianwy 1695657342@qq.com
  * @Date: 2025-01-05 22:05:48
  * @LastEditors: laotianwy 1695657342@qq.com
- * @LastEditTime: 2025-01-06 02:49:13
+ * @LastEditTime: 2025-01-06 03:12:09
  * @FilePath: /cli/src/utils/apiGenTs/index.ts
  * @Description: 根据配置文件生成ts文件
  */
@@ -34,15 +34,16 @@ const apiGenTs = async () => {
             })
 
 
-            // await generateApi({
-            //     name: `${swaggerSingInfo.name}.ts`,
-            //     output: API_GEN_TS_THROW_DIR_NAME,
-            //     spec: getNewSpecToSwagger,
-            //     unwrapResponseData: true,
-            //     httpClientType: 'axios',
-            //     templates: TEMPLATE_DIR,
-            //     url: swaggerSingInfo.url,
-            // })
+            const templatesDirAddress = new URL('./templatesDir', import.meta.url);
+            await generateApi({
+                name: `${swaggerSingInfo.name}.ts`,
+                output: API_GEN_TS_THROW_DIR_NAME,
+                spec: getNewSpecToSwagger,
+                unwrapResponseData: true,
+                httpClientType: 'axios',
+                templates: templatesDirAddress.pathname,
+                url: swaggerSingInfo.url,
+            })
         }
     } catch (ex) {
         console.log('ex', ex)

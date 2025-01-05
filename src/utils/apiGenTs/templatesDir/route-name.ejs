@@ -1,11 +1,3 @@
-<!--
- * @Author: laotianwy 1695657342@qq.com
- * @Date: 2025-01-06 02:46:26
- * @LastEditors: laotianwy 1695657342@qq.com
- * @LastEditTime: 2025-01-06 02:46:43
- * @FilePath: /cli/src/utils/apiGenTs/templatesDir/route-name.ejs
- * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
--->
 <%
 const { routeInfo, utils } = it;
 const {
@@ -21,13 +13,21 @@ const {
 } = routeInfo;
 const { _, fmtToJSDocLine, require } = utils;
 
+//const methodAliases = {
+//  get: (pathName, hasPathInserts) =>
+//    _.camelCase(`${pathName}_${hasPathInserts ? "detail" : "list"}`),
+//  post: (pathName, hasPathInserts) => _.camelCase(`${pathName}_create`),
+//  put: (pathName, hasPathInserts) => _.camelCase(`${pathName}_update`),
+//  patch: (pathName, hasPathInserts) => _.camelCase(`${pathName}_partial_update`),
+//  delete: (pathName, hasPathInserts) => _.camelCase(`${pathName}_delete`),
+//}
+
 const methodAliases = {
-  get: (pathName, hasPathInserts) =>
-    _.camelCase(`${pathName}_${hasPathInserts ? "detail" : "list"}`),
-  post: (pathName, hasPathInserts) => _.camelCase(`${pathName}_create`),
-  put: (pathName, hasPathInserts) => _.camelCase(`${pathName}_update`),
-  patch: (pathName, hasPathInserts) => _.camelCase(`${pathName}_partial_update`),
-  delete: (pathName, hasPathInserts) => _.camelCase(`${pathName}_delete`),
+    get: (pathName, hasPathInserts) => _.camelCase(`${pathName}`),
+    post: (pathName, hasPathInserts) => _.camelCase(`${pathName}`),
+    put: (pathName, hasPathInserts) => _.camelCase(`${pathName}`),
+    patch: (pathName, hasPathInserts) => _.camelCase(`${pathName}`),
+    delete: (pathName, hasPathInserts) => _.camelCase(`${pathName}`),
 };
 
 const createCustomOperationId = (method, route, moduleName) => {
@@ -42,8 +42,8 @@ const createCustomOperationId = (method, route, moduleName) => {
     : _.camelCase(_.lowerCase(method) + "_" + [moduleName].join("_")) || "index";
 };
 
-if (operationId)
-  return _.camelCase(operationId);
+//if (operationId)
+//  return _.camelCase(operationId);
 if (route === "/")
   return _.camelCase(`${_.lowerCase(method)}Root`);
 
