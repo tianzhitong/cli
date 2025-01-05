@@ -1,6 +1,6 @@
 {
   "name": "@tianzhitong/cli",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "main": "./dist/index.js",
   "type": "module",
   "private": false,
@@ -16,10 +16,14 @@
     "access": "public"
   },
   "files": [
-    "/dist"
+    "/dist",
+    "README.md"
   ],
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "tianzhitong",
+    "tianzhitong/cli"
+  ],
+  "author": "tianzhitong",
   "license": "ISC",
   "description": "",
   "devDependencies": {
