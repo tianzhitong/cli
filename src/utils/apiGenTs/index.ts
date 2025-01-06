@@ -2,7 +2,7 @@
  * @Author: laotianwy 1695657342@qq.com
  * @Date: 2025-01-05 22:05:48
  * @LastEditors: laotianwy 1695657342@qq.com
- * @LastEditTime: 2025-01-06 03:57:05
+ * @LastEditTime: 2025-01-06 16:45:07
  * @FilePath: /cli/src/utils/apiGenTs/index.ts
  * @Description: 根据配置文件生成ts文件
  */
@@ -13,7 +13,7 @@ import logSymbols from "../common/logSymbols";
 import { resolveApp } from "../common/removeDir"
 import { generateApi } from 'swagger-typescript-api';
 import filterNoUseApi from "./filterNoUseApi";
-import { API_GEN_TS_THROW_DIR_NAME, TEMPLATE_DIR } from "../../config/const";
+import { API_GEN_TS_THROW_DIR_NAME } from "../../config/const";
 import createManyServiceFileBySwaggler from './createManyServiceFileBySwaggler'
 
 const apiGenTs = async () => {
