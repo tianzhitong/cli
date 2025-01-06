@@ -26,7 +26,7 @@ const createManyServiceFileBySwaggler = (swaggerList: configProps['swaggerList']
     const importServiceConfigStr = 'import { serviceConfig } from \'@/config/request/swaggerServiceConfig\';';
 
     const exportApiStr = `export const Api = { ${swaggerList.map(item => toFistLetterLocaleUpperCase(item.name)).join(', ')} };`;
-    const exportInstanceListStr = swaggerList.map(({ name }) => `const ${name} = new ${toFistLetterLocaleUpperCase(name)}(warpperServiceConfig(serviceConfig, { name: '${name}', basePath: '/${name}' }));`).join('\n');
+    const exportInstanceListStr = swaggerList.map(({ name,baseUrl }) => `const ${name} = new ${toFistLetterLocaleUpperCase(name)}(warpperServiceConfig(serviceConfig, { name: '${name}', basePath: '${baseUrl ?? ''}' }));`).join('\n');
     const exportInstanceStr = `export const apiInstanceList = [${swaggerList.map(({ name }) => `{ key: '${name}', instance: ${name} }`).join(', ')}];`;
     const exportApiObjStr = `export const api = { ${swaggerList.map(item => `${item.name}`).join(', ')} };`;
 
