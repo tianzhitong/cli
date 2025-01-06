@@ -1,5 +1,5 @@
 {
-  "name": "@tianzhitong/cli",
+  "name": "tianzhitong-cli",
   "version": "1.2.2",
   "main": "./dist/index.js",
   "type": "module",
