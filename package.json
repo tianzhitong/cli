@@ -10,7 +10,7 @@
     "build": "tsup"
   },
   "bin": {
-    "@tianzhitong-cli": "./dist/index.js"
+    "tianzhitong-cli": "./dist/index.js"
   },
   "publishConfig": {
     "access": "public"
