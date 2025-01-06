@@ -2,7 +2,7 @@
  * @Author: laotianwy 1695657342@qq.com
  * @Date: 2025-01-05 22:05:48
  * @LastEditors: laotianwy 1695657342@qq.com
- * @LastEditTime: 2025-01-06 16:45:07
+ * @LastEditTime: 2025-01-06 22:37:07
  * @FilePath: /cli/src/utils/apiGenTs/index.ts
  * @Description: 根据配置文件生成ts文件
  */
@@ -35,7 +35,10 @@ const apiGenTs = async () => {
             })
 
 
+            console.log('templatesDirAddress start')
             const templatesDirAddress = new URL('./templatesDir', import.meta.url);
+            console.log('templatesDirAddress start' + templatesDirAddress.pathname)
+
             await generateApi({
                 name: `${swaggerSingInfo.name}.ts`,
                 output: API_GEN_TS_THROW_DIR_NAME,
