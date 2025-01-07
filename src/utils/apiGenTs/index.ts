@@ -2,7 +2,7 @@
  * @Author: laotianwy 1695657342@qq.com
  * @Date: 2025-01-05 22:05:48
  * @LastEditors: laotianwy 1695657342@qq.com
- * @LastEditTime: 2025-01-07 20:44:22
+ * @LastEditTime: 2025-01-07 21:28:17
  * @FilePath: /cli/src/utils/apiGenTs/index.ts
  * @Description: 根据配置文件生成ts文件
  */
@@ -10,7 +10,7 @@
 import chalk from "chalk";
 import fs from "fs-extra";
 import { resolve } from 'node:path';
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import { configProps } from "../../../apiGenTs";
 import logSymbols from "../common/logSymbols";
 import { resolveApp } from "../common/removeDir"
@@ -24,8 +24,8 @@ const apiGenTs = async () => {
     try {
         // 【1】读取运行目录下的配置文件
         const path = resolveApp('./apiGenTs.config.js');
-
-        const getConfigFileInfo = await import(path).then(fileInfo => fileInfo.default) as configProps;
+        // 注意：import导入的路径必须是文件路径。
+        const getConfigFileInfo = await import(pathToFileURL(path).href).then(fileInfo => fileInfo.default) as configProps;
         if ((getConfigFileInfo?.swaggerList ?? []).length === 0) {
             throw new Error(`${logSymbols.error}${chalk.yellow('获取swaggerList属性失败！')}`);
         }
@@ -52,7 +52,6 @@ const apiGenTs = async () => {
 
             // 模板的路径
             const templatesDirAddress = resolve(currnetFilePath, '../templatesDir');
-            console.log('templatesDirAddress',templatesDirAddress);
 
             await generateApi({
                 name: `${swaggerSingInfo.name}.ts`,
