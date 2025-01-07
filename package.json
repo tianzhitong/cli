@@ -6,8 +6,8 @@
   "private": false,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "tsup --watch",
-    "build": "tsup"
+    "dev": "cross-env CLI_ENV=dev tsup --watch",
+    "build": "cross-env CLI_ENV=production tsup"
   },
   "bin": {
     "tianzhitong-cli": "./dist/index.js"
@@ -31,11 +31,11 @@
     "@types/fs-extra": "^11.0.4",
     "@types/node": "^22.10.5",
     "@types/shelljs": "^0.8.15",
+    "cross-env": "^7.0.3",
     "tsup": "^8.3.5",
     "typescript": "^5.7.2"
   },
   "dependencies": {
-    "swagger-typescript-api": "^12.0.4",
     "chalk": "^5.4.1",
     "commander": "^13.0.0",
     "download-git-repo": "^3.0.2",
@@ -44,6 +44,7 @@
     "inquirer": "^12.3.0",
     "ora": "^8.1.1",
     "shelljs": "^0.8.5",
+    "swagger-typescript-api": "^12.0.4",
     "table": "^6.9.0"
   }
 }
