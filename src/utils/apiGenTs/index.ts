@@ -2,15 +2,15 @@
  * @Author: laotianwy 1695657342@qq.com
  * @Date: 2025-01-05 22:05:48
  * @LastEditors: laotianwy 1695657342@qq.com
- * @LastEditTime: 2025-01-07 00:27:10
+ * @LastEditTime: 2025-01-07 20:44:22
  * @FilePath: /cli/src/utils/apiGenTs/index.ts
  * @Description: 根据配置文件生成ts文件
  */
 
 import chalk from "chalk";
 import fs from "fs-extra";
-import { join } from 'path';
-import { fileURLToPath } from "url";
+import { resolve } from 'node:path';
+import { fileURLToPath } from "node:url";
 import { configProps } from "../../../apiGenTs";
 import logSymbols from "../common/logSymbols";
 import { resolveApp } from "../common/removeDir"
@@ -51,7 +51,8 @@ const apiGenTs = async () => {
             const currnetFilePath = fileURLToPath(import.meta.url);
 
             // 模板的路径
-            const templatesDirAddress = join(currnetFilePath, '../templatesDir');
+            const templatesDirAddress = resolve(currnetFilePath, '../templatesDir');
+            console.log('templatesDirAddress',templatesDirAddress);
 
             await generateApi({
                 name: `${swaggerSingInfo.name}.ts`,
