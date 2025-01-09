@@ -1,0 +1,48 @@
+<% 
+// 转大写函数
+const toUpperCase = (str) => str.charAt(0).toUpperCase() + str.slice(1);
+
+// 动态生成 API
+const globalApis = [];
+for (let apiName of apiNames) {
+    globalApis.push(`import { Api as ${toUpperCase(apiName.name)} } from './${apiName.name}';`);
+}
+%>
+
+<%- globalApis.join('\n') %>
+import { serviceConfig, serviceConfigProps } from '../config/request/swaggerServiceConfig';
+
+export interface warpperServiceConfigProps {
+    name: string;
+    basePath: string;
+}
+
+export const Api = {
+<% apiNames.forEach((item) => { %>
+    <%= toUpperCase(item.name) %>,
+<% }) %>
+};
+
+const warpperServiceConfig = (apiConfig: serviceConfigProps, ctx: warpperServiceConfigProps) => {
+    const newConfig = { ...apiConfig };
+    if (newConfig.baseURL) {
+        newConfig.baseURL = newConfig.baseURL + ctx.basePath;
+    }
+    return newConfig;
+};
+
+<% apiNames.forEach((item) => { %>
+const <%= item.name %> = new <%= toUpperCase(item.name) %>(warpperServiceConfig(serviceConfig, { name: '<%= item.name %>', basePath: '<%= item.basePath %>' }));
+<% }) %>
+
+export const apiInstanceList = [
+<% apiNames.forEach((item) => { %>
+    { key: '<%= item.name %>', instance: <%= item.name %> },
+<% }) %>
+];
+
+export const api = {
+<% apiNames.forEach((item) => { %>
+    <%= item.name %>,
+<% }) %>
+};

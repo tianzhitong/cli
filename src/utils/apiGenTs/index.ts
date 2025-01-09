@@ -2,7 +2,7 @@
  * @Author: laotianwy 1695657342@qq.com
  * @Date: 2025-01-05 22:05:48
  * @LastEditors: laotianwy 1695657342@qq.com
- * @LastEditTime: 2025-01-09 00:25:01
+ * @LastEditTime: 2025-01-09 18:45:34
  * @FilePath: /cli/src/utils/apiGenTs/index.ts
  * @Description: 根据配置文件生成ts文件
  */
@@ -49,7 +49,7 @@ const apiGenTs = async () => {
                 getSwaggerSpecData = fs.readJsonSync(resolveApp(swaggerSingInfo.url));
             }
 
-            remoteSwaggerDataList.set(swaggerSingInfo,getSwaggerSpecData)
+            remoteSwaggerDataList.set(swaggerSingInfo, getSwaggerSpecData)
 
 
             // 过滤不需要的api
@@ -77,7 +77,7 @@ const apiGenTs = async () => {
         getGenErrorApi(remoteSwaggerDataList)
 
         // 动态生成api文件事其他文件调用
-        createManyServiceFileBySwaggler(getConfigFileInfo.swaggerList, outApiDirPath);
+        createManyServiceFileBySwaggler(getConfigFileInfo?.swaggerList, outApiDirPath);
         // 创建配置文件到项目里去
         await initConfigFileToProject(resolve(outApiDirPath, `../${API_CONFIG_BASE_URL_FILE}`));
         console.log(logSymbols.success, chalk.green(`动态生成ts文件成功！`));

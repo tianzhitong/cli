@@ -2,52 +2,33 @@
  * @Author: laotianwy 1695657342@qq.com
  * @Date: 2025-01-06 03:21:53
  * @LastEditors: laotianwy 1695657342@qq.com
- * @LastEditTime: 2025-01-08 01:10:46
+ * @LastEditTime: 2025-01-09 18:48:16
  * @FilePath: /cli/src/utils/apiGenTs/createManyServiceFileBySwaggler.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
 
-import pkg from 'fs-extra';
-const { writeFileSync } = pkg;
+import fs from 'fs-extra';
+import { join, resolve } from 'node:path';
+import ejs from 'ejs';
+import { fileURLToPath } from 'node:url';
 import { configProps } from "../../../apiGenTs"
-import { join } from 'node:path';
 
-/** 第一个变大些，其他小写 */
-const toFistLetterLocaleUpperCase = (str: string) => {
-    return str[0].toLocaleUpperCase() + str.slice(1);
-};
+const createManyServiceFileBySwaggler = (swaggerList: configProps['swaggerList'], outApiDirPath: string) => {
+    const dynamicGenPath = resolve(fileURLToPath(import.meta.url), '../templatesDir/dynamic-gen-api-template.ejs');
+    const dynamicEjsFileContent = fs.readFileSync(dynamicGenPath);
 
-const createManyServiceFileBySwaggler = (swaggerList: configProps['swaggerList'],outApiDirPath: string) => {
-    const importList = swaggerList.map(item => {
-        return `import { Api as ${toFistLetterLocaleUpperCase(item.name)} } from './${item.name}';`;
-    });
-
-    const importString = importList.join('\n');
-    const importServiceConfigStr = 'import { serviceConfig } from \'../config/request/swaggerServiceConfig\';';
-
-    const exportApiStr = `export const Api = { ${swaggerList.map(item => toFistLetterLocaleUpperCase(item.name)).join(', ')} };`;
-    const exportInstanceListStr = swaggerList.map(({ name,baseUrl }) => `const ${name} = new ${toFistLetterLocaleUpperCase(name)}(warpperServiceConfig(serviceConfig, { name: '${name}', basePath: '${baseUrl ?? ''}' }));`).join('\n');
-    const exportInstanceStr = `export const apiInstanceList = [${swaggerList.map(({ name }) => `{ key: '${name}', instance: ${name} }`).join(', ')}];`;
-    const exportApiObjStr = `export const api = { ${swaggerList.map(item => `${item.name}`).join(', ')} };`;
-
-    const wrapperServiceConfigFuncString = `const warpperServiceConfig = (apiConfig: any, ctx: { name: string; basePath: string; }) => {
-        const newConfig = { ...apiConfig };
-        if (newConfig.baseURL) {
-            newConfig.baseURL = newConfig.baseURL + ctx.basePath;
+    const apiNames = (swaggerList ?? []).map(item => {
+        return {
+            name: item.name,
+            basePath: item.basePath ?? '',
+            toUpperCaseName: item.name.charAt(0).toUpperCase() + item.name.slice(1)
         }
-        return newConfig;
-    };`
-    writeFileSync(join(outApiDirPath,'index.ts'), [
-        importString,
-        importServiceConfigStr,
-        exportApiStr,
-        wrapperServiceConfigFuncString,
-        exportInstanceListStr,
-        exportInstanceStr,
-        exportApiObjStr
-    ].join('\n\n'), {
-        flush: true
     });
+
+    const dynamicGenJsFile = ejs.render(String(dynamicEjsFileContent), {
+        apiNames
+    });
+    fs.writeFileSync(join(outApiDirPath, 'index.ts'), String(dynamicGenJsFile))
 }
 
 export default createManyServiceFileBySwaggler;
