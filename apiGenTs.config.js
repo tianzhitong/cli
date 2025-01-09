@@ -15,13 +15,13 @@ const config = {
             url: 'http://127.0.0.1:5500/proxy/swaggerData.json',
             name: 'orderApi',
             apis: {
-                'GET': ["/system/user/profile"],
-                'POST': [],
-                "PUT": ['/system/user/profile'],
-                'DELETE': []
-            }
-        }
-    ]
+                GET: ['/system/user/profile'],
+                POST: [],
+                PUT: ['/system/user/profile'],
+                DELETE: [],
+            },
+        },
+    ],
 };
 
 export default config;

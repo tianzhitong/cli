@@ -5,10 +5,10 @@
  * @LastEditTime: 2025-01-04 22:52:33
  * @FilePath: /cli/src/utils/cloneRepo.ts
  * @Description: 克隆仓库
-*/
+ */
 import download from 'download-git-repo';
-import ora from "ora";
-import chalk from "chalk";
+import ora from 'ora';
+import chalk from 'chalk';
 
 interface cloneRepoProps {
     /** 远程仓库地址 */
@@ -16,7 +16,7 @@ interface cloneRepoProps {
     /** 本地文件夹的名字 */
     fileName: string;
     /** 可选项 */
-    option?: boolean
+    option?: boolean;
 }
 
 /** 克隆项目 */
@@ -24,7 +24,7 @@ const cloneRepo = (props: cloneRepoProps): Promise<boolean> => {
     const { remote, fileName, option = false } = props;
     const spinner = ora('正在拉取项目......').start();
     return new Promise((resoleve, reject) => {
-        download(remote, fileName, option, err => {
+        download(remote, fileName, option, (err) => {
             if (err) {
                 spinner.fail(chalk.red(err));
                 reject(false);
@@ -33,8 +33,8 @@ const cloneRepo = (props: cloneRepoProps): Promise<boolean> => {
 
             spinner.succeed(chalk.green('拉取成功'));
             resoleve(true);
-        })
-    })
+        });
+    });
 };
 
 export default cloneRepo;

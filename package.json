@@ -7,7 +7,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "cross-env CLI_ENV=dev tsup --watch",
-    "build": "cross-env CLI_ENV=production tsup"
+    "build": "cross-env CLI_ENV=production tsup",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
   },
   "bin": {
     "tianzhitong-cli": "./dist/index.js"
@@ -28,12 +30,20 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
+    "@eslint/js": "^9.17.0",
+    "@stylistic/eslint-plugin": "^2.12.1",
     "@types/fs-extra": "^11.0.4",
     "@types/node": "^22.10.5",
     "@types/shelljs": "^0.8.15",
     "cross-env": "^7.0.3",
+    "eslint": "^9.17.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "globals": "^15.14.0",
+    "prettier": "^3.4.2",
     "tsup": "^8.3.5",
-    "typescript": "^5.7.2"
+    "typescript": "^5.7.2",
+    "typescript-eslint": "^8.19.1"
   },
   "dependencies": {
     "chalk": "^5.4.1",

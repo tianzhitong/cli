@@ -3,7 +3,7 @@
  * @Author: laotianwy 1695657342@qq.com
  * @Date: 2025-01-05 01:58:37
  * @LastEditors: laotianwy 1695657342@qq.com
- * @LastEditTime: 2025-01-07 21:25:33
+ * @LastEditTime: 2025-01-10 06:01:30
  * @FilePath: /cli/src/index.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -22,29 +22,39 @@ export type GlobalConfigProps = configProps;
 
 program.version(CLI_VERSION, '-v --version');
 
-console.log('\r\n' + chalk.greenBright.bold(figlet.textSync(CLI_NAME, {
-    font: 'Standard',
-    horizontalLayout: 'default',
-    verticalLayout: 'default',
-    width: 80,
-    whitespaceBreak: true
-})));
+console.log(
+    '\r\n' +
+        chalk.greenBright.bold(
+            figlet.textSync(CLI_NAME, {
+                font: 'Standard',
+                horizontalLayout: 'default',
+                verticalLayout: 'default',
+                width: 80,
+                whitespaceBreak: true,
+            }),
+        ),
+);
 
 console.log(`\r\nRun ${chalk.cyan(`${CLI_NAME} <command> --help`)} for detailed usage of given command\r\n`);
 
 program
     .name(CLI_NAME)
-    .description("自定义脚手架")
-    .usage("<command> [options]")
+    .description('自定义脚手架')
+    .usage('<command> [options]')
     .on('--help', () => {
-        console.log('\r\n' + chalk.greenBright.bold(figlet.textSync(CLI_NAME, {
-            font: 'Standard',
-            horizontalLayout: 'default',
-            verticalLayout: 'default',
-            width: 80,
-            whitespaceBreak: true
-        })));
-        console.log(`\r\nRun ${chalk.cyan(`${CLI_NAME} <command> --help`)} for detailed usage of given command\r\n`)
+        console.log(
+            '\r\n' +
+                chalk.greenBright.bold(
+                    figlet.textSync(CLI_NAME, {
+                        font: 'Standard',
+                        horizontalLayout: 'default',
+                        verticalLayout: 'default',
+                        width: 80,
+                        whitespaceBreak: true,
+                    }),
+                ),
+        );
+        console.log(`\r\nRun ${chalk.cyan(`${CLI_NAME} <command> --help`)} for detailed usage of given command\r\n`);
     });
 
 program
@@ -57,38 +67,30 @@ program
 program
     .command('publish')
     .description('npm私服包发布')
-    .option('-l, --left','修改最左边版本')
-    .option('-m, --middle','修改中间版本')
-    .option('-r, --right','修改最右边版本')
+    .option('-l, --left', '修改最左边版本')
+    .option('-m, --middle', '修改中间版本')
+    .option('-r, --right', '修改最右边版本')
     .action(initPublish);
 
+program.command('apiGenTs').description('根据接口配置文件动态生成ts').action(apiGenTs);
 
-program
-    .command('apiGenTs')
-    .description('根据接口配置文件动态生成ts')
-    .action(apiGenTs);
-
-program
-    .command('nrm <command>')
-    .description('切换npm源')
-    .action(nrmCommand)
+program.command('nrm <command>').description('切换npm源').action(nrmCommand);
 
 program
     .command('list')
     .description('查看所有可用模板')
     .action(() => {
-        const data = GIT_TEMPLATE_LIST.map(item => [chalk.bold.yellowBright(item.name), item.value, item.desc]);
-        data.unshift([chalk.yellowBright("模板名称"), chalk.yellowBright("模板地址"), chalk.yellowBright("模板描述")]);
+        const data = GIT_TEMPLATE_LIST.map((item) => [chalk.bold.yellowBright(item.name), item.value, item.desc]);
+        data.unshift([chalk.yellowBright('模板名称'), chalk.yellowBright('模板地址'), chalk.yellowBright('模板描述')]);
         const config = {
             header: {
                 alignment: 'center',
                 content: chalk.yellowBright(logSymbols.star + ' 模板列表'),
             },
         };
-        console.log(table(data,config as any));
+        console.log(table(data, config as any));
         console.log(chalk.yellowBright(logSymbols.star, '模板列表'));
     });
-
 
 // 利用commander解析命令行输入，必须写在所有内容最后面
 program.parse(process.argv);

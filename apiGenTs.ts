@@ -2,16 +2,16 @@
  * @Author: laotianwy 1695657342@qq.com
  * @Date: 2025-01-05 22:11:15
  * @LastEditors: laotianwy 1695657342@qq.com
- * @LastEditTime: 2025-01-09 18:36:32
+ * @LastEditTime: 2025-01-09 20:36:56
  * @FilePath: /cli/apiGenTs.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
 
 interface apiProps {
-    'GET': string[]
-    'POST': string[],
-    "PUT": string[],
-    "DELETE": string[]
+    GET: string[];
+    POST: string[];
+    PUT: string[];
+    DELETE: string[];
 }
 
 export interface swaggerListProps {
@@ -25,7 +25,7 @@ export interface swaggerListProps {
     basePath?: string;
     /** 如果传入当前属性。只生成部分接口。 */
     apis: Partial<apiProps>;
-};
+}
 
 export interface configProps {
     /** swagger接口数据open 数据 */
@@ -35,8 +35,10 @@ export interface configProps {
 }
 
 const config: configProps = {
+    /** 接口文档 */
     swaggerList: [],
-    outDir:'./src/service/'
-}
+    /** 把接口扔在那个目录下 */
+    outDir: './src/service/',
+};
 
 export default config;

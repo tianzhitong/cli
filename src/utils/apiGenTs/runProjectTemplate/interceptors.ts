@@ -31,12 +31,9 @@ apiInstanceList.forEach(async (item) => {
         wrapperRequestHeader(config);
         return config;
     });
-    item.instance.instance.interceptors.response.use(
-		responseInterceptor,
-		function (error) {
-			return Promise.reject(error);
-		}
-	);
+    item.instance.instance.interceptors.response.use(responseInterceptor, function (error) {
+        return Promise.reject(error);
+    });
 });
 
 export const interceptorsRequest = api;

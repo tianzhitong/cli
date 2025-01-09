@@ -9,7 +9,7 @@
 import inquirer from 'inquirer';
 
 /**
- * 
+ *
  * @param message 询问的信息
  * @returns 单个确认框
  */
@@ -17,55 +17,55 @@ export const inquirerConfirm = async (message: string): Promise<{ confirm: boole
     const answer = await inquirer.prompt({
         name: 'confirm',
         type: 'confirm',
-        message
+        message,
     });
 
     return answer;
-}
+};
 
 /**
- * 
- * @param message 
- * @param choices 
- * @param type 
+ *
+ * @param message
+ * @param choices
+ * @param type
  * @returns 支持多个选择
  */
 export const inquirerChoose = async (message: string, choices: any, type: 'list' = 'list') => {
     const answer = await inquirer.prompt({
         type,
-        name: "choose",
+        name: 'choose',
         message,
         choices,
     });
     return answer;
-}
-
+};
 
 /**
- * @param {string} message 询问提示语句 
+ * @param {string} message 询问提示语句
  * @returns 输入结果
  */
 export const inquirerInput = async (message: string) => {
     const answer = await inquirer.prompt({
         name: 'input',
         type: 'input',
-        message
+        message,
     });
-    return answer
-}
-
+    return answer;
+};
 
 /*
- * @param {Array} messages 询问提示语句数组 
+ * @param {Array} messages 询问提示语句数组
  * @returns {Object} 结果对象
-*/
+ */
 export const inquirerInputs = async (messages: any[]) => {
-    const answers = await inquirer.prompt(messages.map(msg => {
-        return {
-            name: msg.name,
-            type: 'input',
-            message: msg.message
-        }
-    }));
-    return answers
-}
+    const answers = await inquirer.prompt(
+        messages.map((msg) => {
+            return {
+                name: msg.name,
+                type: 'input',
+                message: msg.message,
+            };
+        }),
+    );
+    return answers;
+};

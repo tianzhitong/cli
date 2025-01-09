@@ -6,11 +6,10 @@
  * @FilePath: /cli/src/utils/npmInstall.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
-import shell from "shelljs";
-import ora from "ora";
-import logSymbols from "../common/logSymbols";
-import chalk from "chalk";
-
+import shell from 'shelljs';
+import ora from 'ora';
+import logSymbols from '../common/logSymbols';
+import chalk from 'chalk';
 
 const npmInstall = (projectDir: string) => {
     const spinner = ora('正在安装依赖......').start();
@@ -18,8 +17,8 @@ const npmInstall = (projectDir: string) => {
         console.log(logSymbols.error, chalk.yellow('自动安装依赖失败，请手动安装'));
     }
 
-    spinner.succeed(chalk.green('~~~依赖安装成功~~~'))
-    spinner.succeed(chalk.green('~~~项目创建完成~~~'))
-}
+    spinner.succeed(chalk.green('~~~依赖安装成功~~~'));
+    spinner.succeed(chalk.green('~~~项目创建完成~~~'));
+};
 
 export default npmInstall;

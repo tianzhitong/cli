@@ -6,22 +6,21 @@
  * @FilePath: /cli/src/utils/publish/editPwdVersion.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
-import fs from "fs-extra"
-import chalk from "chalk";
-import logSymbols from "../common/logSymbols";
-import { resolveApp } from "../common/removeDir";
-import { initPublishProps } from "./initPublish";
-
+import fs from 'fs-extra';
+import chalk from 'chalk';
+import logSymbols from '../common/logSymbols';
+import { resolveApp } from '../common/removeDir';
+import { initPublishProps } from './initPublish';
 
 const editPwdVersion = async (props: initPublishProps, version: string) => {
     const { left, middle, right } = props;
     const currentNodeRunDir = resolveApp(`./package.json`);
     const pkg = await fs.readJson(currentNodeRunDir);
     const editVersion = version.trim();
-    const editVersionList = editVersion.split('.')
+    const editVersionList = editVersion.split('.');
 
     if (editVersion.length === 0) {
-        console.log(logSymbols.error, chalk.redBright("暂未获取到version。请修改！"));
+        console.log(logSymbols.error, chalk.redBright('暂未获取到version。请修改！'));
         return;
     }
 
@@ -39,6 +38,6 @@ const editPwdVersion = async (props: initPublishProps, version: string) => {
     await fs.writeJson(currentNodeRunDir, pkg, { spaces: 2 });
 
     return pkg['version'];
-}
+};
 
 export default editPwdVersion;

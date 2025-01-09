@@ -11,24 +11,24 @@ import fs from 'fs-extra';
 import { join, resolve } from 'node:path';
 import ejs from 'ejs';
 import { fileURLToPath } from 'node:url';
-import { configProps } from "../../../apiGenTs"
+import { configProps } from '../../../apiGenTs';
 
 const createManyServiceFileBySwaggler = (swaggerList: configProps['swaggerList'], outApiDirPath: string) => {
     const dynamicGenPath = resolve(fileURLToPath(import.meta.url), '../templatesDir/dynamic-gen-api-template.ejs');
     const dynamicEjsFileContent = fs.readFileSync(dynamicGenPath);
 
-    const apiNames = (swaggerList ?? []).map(item => {
+    const apiNames = (swaggerList ?? []).map((item) => {
         return {
             name: item.name,
             basePath: item.basePath ?? '',
-            toUpperCaseName: item.name.charAt(0).toUpperCase() + item.name.slice(1)
-        }
+            toUpperCaseName: item.name.charAt(0).toUpperCase() + item.name.slice(1),
+        };
     });
 
     const dynamicGenJsFile = ejs.render(String(dynamicEjsFileContent), {
-        apiNames
+        apiNames,
     });
-    fs.writeFileSync(join(outApiDirPath, 'index.ts'), String(dynamicGenJsFile))
-}
+    fs.writeFileSync(join(outApiDirPath, 'index.ts'), String(dynamicGenJsFile));
+};
 
 export default createManyServiceFileBySwaggler;
