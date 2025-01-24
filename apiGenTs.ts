@@ -2,7 +2,7 @@
  * @Author: laotianwy 1695657342@qq.com
  * @Date: 2025-01-05 22:11:15
  * @LastEditors: laotianwy 1695657342@qq.com
- * @LastEditTime: 2025-01-09 20:36:56
+ * @LastEditTime: 2025-01-24 15:37:26
  * @FilePath: /cli/apiGenTs.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -27,11 +27,22 @@ export interface swaggerListProps {
     apis: Partial<apiProps>;
 }
 
+export interface mockServeProps {
+    /** 是否开启mock */
+    enable: boolean;
+    /** mock地址 */
+    url?: string;
+    /** mock接口扔到那个项目下 默认：default */
+    projectName?: string;
+}
+
 export interface configProps {
     /** swagger接口数据open 数据 */
     swaggerList: Array<swaggerListProps>;
     /** 把生成的接口文件扔到那个目录下 默认为./src/service/下 */
     outDir?: string;
+    /** 是否启用mock服务 */
+    mockServe?: mockServeProps;
 }
 
 const config: configProps = {
@@ -39,6 +50,11 @@ const config: configProps = {
     swaggerList: [],
     /** 把接口扔在那个目录下 */
     outDir: './src/service/',
+    /** 是否启用mock服务 */
+    mockServe: {
+        enable: true,
+        url: 'http://localhost:3000',
+    },
 };
 
 export default config;

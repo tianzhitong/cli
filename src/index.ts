@@ -3,7 +3,7 @@
  * @Author: laotianwy 1695657342@qq.com
  * @Date: 2025-01-05 01:58:37
  * @LastEditors: laotianwy 1695657342@qq.com
- * @LastEditTime: 2025-01-10 06:01:30
+ * @LastEditTime: 2025-01-22 22:07:08
  * @FilePath: /cli/src/index.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -81,6 +81,7 @@ program
     .description('查看所有可用模板')
     .action(() => {
         const data = GIT_TEMPLATE_LIST.map((item) => [chalk.bold.yellowBright(item.name), item.value, item.desc]);
+
         data.unshift([chalk.yellowBright('模板名称'), chalk.yellowBright('模板地址'), chalk.yellowBright('模板描述')]);
         const config = {
             header: {

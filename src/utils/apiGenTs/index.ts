@@ -2,7 +2,7 @@
  * @Author: laotianwy 1695657342@qq.com
  * @Date: 2025-01-05 22:05:48
  * @LastEditors: laotianwy 1695657342@qq.com
- * @LastEditTime: 2025-01-09 18:45:34
+ * @LastEditTime: 2025-01-24 17:29:55
  * @FilePath: /cli/src/utils/apiGenTs/index.ts
  * @Description: 根据配置文件生成ts文件
  */
@@ -20,6 +20,7 @@ import { API_CONFIG_BASE_URL_FILE, API_GEN_TS_THROW_DIR_NAME } from '../../confi
 import createManyServiceFileBySwaggler from './createManyServiceFileBySwaggler';
 import initConfigFileToProject from './createFileToProject';
 import getGenErrorApi from './getGenErrorApi';
+import { createRemoteMockApi } from './createRemoteMockApi';
 
 const apiGenTs = async () => {
     try {
@@ -37,6 +38,8 @@ const apiGenTs = async () => {
         if ((getConfigFileInfo?.swaggerList ?? []).length === 0) {
             throw new Error(`${logSymbols.error}${chalk.yellow('获取swaggerList属性失败！')}`);
         }
+
+        const mockApiMapData = new Map();
 
         const remoteSwaggerDataList = new Map();
         // 【2】根据配置文件来生成ts文件
@@ -59,6 +62,8 @@ const apiGenTs = async () => {
                 baseSetUseApiList: swaggerSingInfo.apis,
             });
 
+            mockApiMapData.set(swaggerSingInfo.name, getNewSpecToSwagger);
+
             // 借鉴的模板路径
             const templatesDirAddress = resolve(fileURLToPath(import.meta.url), '../templatesDir');
 
@@ -79,9 +84,24 @@ const apiGenTs = async () => {
 
         // 动态生成api文件事其他文件调用
         createManyServiceFileBySwaggler(getConfigFileInfo?.swaggerList, outApiDirPath);
+
         // 创建配置文件到项目里去
         await initConfigFileToProject(resolve(outApiDirPath, `../${API_CONFIG_BASE_URL_FILE}`));
         console.log(logSymbols.success, chalk.green(`动态生成ts文件成功！`));
+
+        if (getConfigFileInfo?.mockServe?.enable) {
+            if (
+                (getConfigFileInfo.mockServe.url ?? '').length === 0 ||
+                getConfigFileInfo.mockServe.url.includes('http') === false
+            ) {
+                throw new Error(`${logSymbols.error}${chalk.yellow('mockServe.url配置错误！')}`);
+            }
+            await createRemoteMockApi(
+                mockApiMapData,
+                getConfigFileInfo.mockServe.url,
+                getConfigFileInfo.mockServe.projectName,
+            );
+        }
     } catch (ex) {
         console.log('ex', ex);
     }
