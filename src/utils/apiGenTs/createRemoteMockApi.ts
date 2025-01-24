@@ -2,7 +2,7 @@
  * @Author: laotianwy 1695657342@qq.com
  * @Date: 2025-01-24 15:33:02
  * @LastEditors: laotianwy 1695657342@qq.com
- * @LastEditTime: 2025-01-24 18:05:55
+ * @LastEditTime: 2025-01-24 18:26:07
  * @FilePath: /cli/src/utils/apiGenTs/createRemoteMockApi.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -71,7 +71,6 @@ export const createRemoteMockApi = async (
             list: sendApiData,
         }),
     }).then((response) => response.json());
-    console.log('push mock api success');
 };
 
 const getNestedData = (data: any, keys: string[]) => {
