@@ -2,7 +2,7 @@
  * @Author: laotianwy 1695657342@qq.com
  * @Date: 2025-01-24 15:33:02
  * @LastEditors: laotianwy 1695657342@qq.com
- * @LastEditTime: 2025-01-24 18:26:07
+ * @LastEditTime: 2025-01-25 00:07:21
  * @FilePath: /cli/src/utils/apiGenTs/createRemoteMockApi.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -24,9 +24,26 @@ export const createRemoteMockApi = async (
                 const apiMethods = Object.keys(apis[apiUrl]);
                 apiMethods.forEach((method) => {
                     const responseToTockStructData = {};
+
+                    const response200Res = apis[apiUrl][method]['responses']?.['200'];
                     const response = apis[apiUrl][method]['responses']?.['200']?.content?.['application/json'];
-                    if (response) {
-                        if (response.schema) {
+                    if (response200Res) {
+                        const item = response200Res.schema;
+                        // 胜男apijson特殊操作
+                        if (item?.['$ref']) {
+                            const firstref = item['$ref'].split('/').filter((item) => item !== '#');
+                            const firstStructData = getNestedData(getFilterApiData, firstref);
+                            if (firstStructData.type === 'object') {
+                                Object.keys(firstStructData?.properties ?? {}).forEach((key) => {
+                                    const result = progressModel(firstStructData.properties, key, getFilterApiData);
+                                    if (typeof result === 'object') {
+                                        responseToTockStructData[key] = result[key];
+                                    } else {
+                                        responseToTockStructData[key] = result;
+                                    }
+                                });
+                            }
+                        } else if (response?.schema) {
                             if ((response.schema?.allOf ?? []).length > 0) {
                                 response.schema?.allOf.forEach((item) => {
                                     if (item['$ref']) {
@@ -87,11 +104,25 @@ const getNestedData = (data: any, keys: string[]) => {
 
 const progressModel = (data: any, parentKey: string, getFilterApiData: any) => {
     const result = {};
-    if (data[parentKey]['type'] !== 'object' && data[parentKey]['type'] !== 'array') {
-        return (result[parentKey] = data[parentKey]['type']);
+    if (data[parentKey]['type'] !== 'object' && data[parentKey]['type'] !== 'array' && data[parentKey]['type']) {
+        result[parentKey] = data[parentKey]['type'];
+        return result[parentKey];
     }
 
-    if (data[parentKey]['type'] === 'object') {
+    if (data?.[parentKey]?.['$ref'] || data[parentKey]['type'] === 'object') {
+        if (data?.[parentKey]?.['$ref']) {
+            if (!result[parentKey]) {
+                result[parentKey] = {};
+            }
+            const firstref = data?.[parentKey]?.['$ref'].split('/').filter((item) => item !== '#');
+            const firstStructData = getNestedData(getFilterApiData, firstref);
+            Object.keys(firstStructData['properties']).forEach((key) => {
+                result[parentKey][key] = progressModel(firstStructData['properties'], key, getFilterApiData);
+            });
+            return result;
+        } else if (!data[parentKey]['properties']) {
+            return result;
+        }
         Object.keys(data[parentKey]['properties']).forEach((key) => {
             if (!result[parentKey]) {
                 result[parentKey] = {};
@@ -104,8 +135,21 @@ const progressModel = (data: any, parentKey: string, getFilterApiData: any) => {
         const items = data[parentKey]['items'];
         if (items['$ref']) {
             const firstref = items['$ref'].split('/').filter((item) => item !== '#');
+            // TODO:此处需要在看。因为递归原因，导致内存爆了。
+            if (firstref[firstref.length - 1] === 'DeptVo') {
+                return {};
+            }
+            if (firstref[firstref.length - 1] === 'GeneralEntity对象') {
+                return {};
+            }
+            if (firstref[firstref.length - 1] === 'Menu对象') {
+                return {};
+            }
+            if (firstref[firstref.length - 1] === 'PositionCategoryEntity对象') {
+                return {};
+            }
+            // TODO:此处需要在看。因为递归原因，导致内存爆了。
             const firstStructData = getNestedData(getFilterApiData, firstref);
-
             Object.keys(firstStructData['properties']).forEach((key) => {
                 result[key] = progressModel(firstStructData['properties'], key, getFilterApiData);
             });
