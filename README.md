@@ -2,7 +2,7 @@
  * @Author: laotianwy 1695657342@qq.com
  * @Date: 2025-01-05 18:09:58
  * @LastEditors: laotianwy 1695657342@qq.com
- * @LastEditTime: 2025-01-29 19:40:51
+ * @LastEditTime: 2025-01-29 19:50:36
  * @FilePath: /cli/README.md
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -10,15 +10,20 @@
 npx tianzhitong-cli create 【project-name】
 
 ### 使用命令动态创建ts接口文件
+```
 npx tianzhitong-cli apiGenTs
 生成重点：需要在项目下放置apiGenTs.config.js文件。具体内容参考当前源码下的apiGenTs.config.js文件。
+```
 ### 启用mock服务
-修改apiGenTs.config.js文件 
+1.修改apiGenTs.config.js文件
+```
 config.mockServe.enable设置为true。
 config.mockServe.url设置成服务的地址。
 config.mockServe.modelData替换mock返回的数据
-启用mock服务部署的代码： https://github.com/laotianwy/mock-api-serve
-修改/src/config/request/interceptors.ts
+```
+2.部署服务： https://github.com/laotianwy/mock-api-serve
+3.修改文件/src/config/request/interceptors.ts
+```
     引入：import { axiosMockWrapper} from 'tianzhitong-cli/dist/adapters';
     item.instance.instance.interceptors.request.use(async (config) => {
         wrapperRequestHeader(config);
@@ -32,13 +37,15 @@ config.mockServe.modelData替换mock返回的数据
         // 需要添加的代码
         return config;
     });
-单个接口使用mock服务。使用接口的时候，添加headers设置useMock:true。就可使用mock服务。
+```
+4.单个接口使用mock服务。使用接口的时候，添加headers设置useMock:true。就可使用mock服务。
+```
 request.global.userResume.list({}, {
     headers: {
         useMock: true
     }
 })
-
+```
 ### 使用命令改变npm的源
 查看所有的源
 npx tianzhitong-cli nrm ls
