@@ -2,7 +2,7 @@
  * @Author: laotianwy 1695657342@qq.com
  * @Date: 2025-01-05 22:05:48
  * @LastEditors: laotianwy 1695657342@qq.com
- * @LastEditTime: 2025-01-24 18:25:48
+ * @LastEditTime: 2025-01-29 18:44:38
  * @FilePath: /cli/src/utils/apiGenTs/index.ts
  * @Description: 根据配置文件生成ts文件
  */
@@ -100,6 +100,7 @@ const apiGenTs = async () => {
                 mockApiMapData,
                 getConfigFileInfo.mockServe.url,
                 getConfigFileInfo.mockServe.projectName,
+                getConfigFileInfo.mockServe.modelData,
             );
             console.log(logSymbols.success, chalk.green(`push mock api to serve 成功！`));
         }

@@ -2,7 +2,7 @@
  * @Author: laotianwy 1695657342@qq.com
  * @Date: 2025-01-24 15:33:02
  * @LastEditors: laotianwy 1695657342@qq.com
- * @LastEditTime: 2025-01-28 00:41:47
+ * @LastEditTime: 2025-01-29 18:48:34
  * @FilePath: /cli/src/utils/apiGenTs/createRemoteMockApi.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -13,6 +13,7 @@ export const createRemoteMockApi = async (
     mockApiMapData: Map<string, any>,
     apiBaseUrl: string,
     projectName: string = 'default',
+    modelData?: object,
 ) => {
     const keys = Array.from(mockApiMapData.keys());
     const sendApiData = [];
@@ -94,6 +95,17 @@ export const createRemoteMockApi = async (
         },
         body: JSON.stringify({
             list: sendApiData,
+        }),
+    }).then((response) => response.json());
+
+    await fetch(`${apiBaseUrl}/mock/responseModel/editResponseModel`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            name: projectName,
+            modelData: modelData ? JSON.stringify(modelData) : '{}',
         }),
     }).then((response) => response.json());
 };
