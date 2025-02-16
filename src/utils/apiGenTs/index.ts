@@ -2,7 +2,7 @@
  * @Author: laotianwy 1695657342@qq.com
  * @Date: 2025-01-05 22:05:48
  * @LastEditors: laotianwy 1695657342@qq.com
- * @LastEditTime: 2025-01-29 18:44:38
+ * @LastEditTime: 2025-02-16 14:15:24
  * @FilePath: /cli/src/utils/apiGenTs/index.ts
  * @Description: 根据配置文件生成ts文件
  */
@@ -24,8 +24,11 @@ import { createRemoteMockApi } from './createRemoteMockApi';
 
 const apiGenTs = async () => {
     try {
+        const path = fs.existsSync(resolveApp('./apiGenTs.config.js'))
+            ? resolveApp('./apiGenTs.config.js')
+            : resolveApp('./apiGenTs.config.mjs');
+
         // 【1】读取运行目录下的配置文件
-        const path = resolveApp('./apiGenTs.config.js');
         // 注意：import导入的路径必须是文件路径。
         const getConfigFileInfo = (await import(pathToFileURL(path).href).then(
             (fileInfo) => fileInfo.default,
