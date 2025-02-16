@@ -2,7 +2,7 @@
  * @Author: laotianwy 1695657342@qq.com
  * @Date: 2025-01-24 20:30:01
  * @LastEditors: laotianwy 1695657342@qq.com
- * @LastEditTime: 2025-01-24 21:45:26
+ * @LastEditTime: 2025-02-16 16:08:47
  * @FilePath: /cli/src/utils/apiGenTs/adapters/axiosWrapper.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -20,7 +20,7 @@ interface mockConfigProps {
 
 export const axiosMockWrapper = (config: InternalAxiosRequestConfig, mockConfig: mockConfigProps) => {
     const { removePrefix, projectName = 'default', mockBaseUrl } = mockConfig;
-    const useMock = config.headers['useMock'];
+    const useMock = config['useMock'];
 
     if (!useMock) return;
     let queryPath = (config.baseURL! + config.url!).replace(
