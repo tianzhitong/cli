@@ -2,12 +2,15 @@
  * @Author: laotianwy 1695657342@qq.com
  * @Date: 2025-01-24 15:33:02
  * @LastEditors: laotianwy 1695657342@qq.com
- * @LastEditTime: 2025-01-29 18:48:34
+ * @LastEditTime: 2025-02-27 23:59:13
  * @FilePath: /cli/src/utils/apiGenTs/createRemoteMockApi.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
 
 const apiRefDeepMap = {};
+
+/** 如果接口的请求类型是这些，那么不生成 */
+const ignoreApiMethodList = ['parameters'];
 
 export const createRemoteMockApi = async (
     mockApiMapData: Map<string, any>,
@@ -25,7 +28,11 @@ export const createRemoteMockApi = async (
             const apiKeys = Object.keys(apis);
             apiKeys.forEach((apiUrl) => {
                 const apiMethods = Object.keys(apis[apiUrl]);
-                apiMethods.forEach((method) => {
+                for (let index = 0; index < apiMethods.length; index++) {
+                    const method = apiMethods[index];
+                    if (ignoreApiMethodList.includes(method)) {
+                        continue;
+                    }
                     const responseToTockStructData = {};
                     const completeURL = apiUrl + method;
                     apiRefDeepMap[completeURL] = {};
@@ -72,6 +79,15 @@ export const createRemoteMockApi = async (
                                     }
                                 });
                             }
+                        } else if (item.type === 'object' && Object.keys(item.properties).length > 0) {
+                            Object.keys(item?.properties ?? {}).forEach((key) => {
+                                responseToTockStructData[key] = progressModel(
+                                    item.properties,
+                                    key,
+                                    getFilterApiData,
+                                    completeURL,
+                                );
+                            });
                         }
                     }
                     const mockServeData = {
@@ -122,6 +138,18 @@ const getNestedData = (data: any, keys: string[]) => {
     return result;
 };
 
+/**
+ *
+ * @param data {
+  code: { type: 'integer', example: 200 },
+  msg: { type: 'string', example: '' },
+  data: { type: 'array', items: { type: 'object', properties: [Object] } }
+}
+ * @param parentKey code
+ * @param getFilterApiData swagger数据
+ * @param completeURL /banners/get
+ * @returns
+ */
 const progressModel = (data: any, parentKey: string, getFilterApiData: any, completeURL: string) => {
     const result = {};
     if (data[parentKey]['type'] !== 'object' && data[parentKey]['type'] !== 'array' && data[parentKey]['type']) {
@@ -227,6 +255,14 @@ const progressModel = (data: any, parentKey: string, getFilterApiData: any, comp
             return result[parentKey];
         } else if (items?.['type'] != undefined && items?.['type'] !== 'object') {
             return [items?.['type']];
+        } else if (items?.['type'] === 'object') {
+            if (!result[parentKey]) {
+                result[parentKey] = [{}];
+            }
+            Object.keys(items['properties']).forEach((key) => {
+                result[parentKey][0][key] = progressModel(items['properties'], key, getFilterApiData, completeURL);
+            });
+            return result[parentKey];
         }
     }
     return result;
