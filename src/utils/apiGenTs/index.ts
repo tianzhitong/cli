@@ -52,7 +52,13 @@ const apiGenTs = async () => {
             // 远程api接口的配置文件
             let getSwaggerSpecData: any;
             if (swaggerSingInfo.url.includes('http')) {
-                getSwaggerSpecData = await fetch(swaggerSingInfo.url).then((data) => data.json());
+                getSwaggerSpecData = await fetch(swaggerSingInfo.url)
+                    .then((data) => data.json())
+                    .catch(() => {
+                        throw new Error(
+                            `${logSymbols.error}${chalk.yellow(`swagger url请求错误 ->> ${swaggerSingInfo.url}`)}`,
+                        );
+                    });
             } else {
                 getSwaggerSpecData = fs.readJsonSync(resolveApp(swaggerSingInfo.url));
             }
@@ -108,7 +114,7 @@ const apiGenTs = async () => {
             console.log(logSymbols.success, chalk.green(`push mock api to serve 成功！`));
         }
     } catch (ex) {
-        console.log('ex', ex);
+        console.log(String(ex));
     }
 };
 
