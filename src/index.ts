@@ -18,6 +18,7 @@ import initAction from './utils/create/initAction';
 import apiGenTs from './utils/apiGenTs';
 import nrmCommand from './utils/nrm';
 import { configProps } from '../apiGenTs';
+import rnPushGitVersionTag from './utils/rnPushGitVersionTag';
 export type GlobalConfigProps = configProps;
 
 program.version(CLI_VERSION, '-v --version');
@@ -71,6 +72,8 @@ program
     .option('-m, --middle', '修改中间版本')
     .option('-r, --right', '修改最右边版本')
     .action(initPublish);
+
+program.command('rnPushGitVersionTag').description('查看android版本并git tag提交').action(rnPushGitVersionTag);
 
 program.command('apiGenTs').description('根据接口配置文件动态生成ts').action(apiGenTs);
 
