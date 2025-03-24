@@ -10,13 +10,15 @@ import shell from 'shelljs';
 import logSymbols from '../common/logSymbols';
 import chalk from 'chalk';
 
-const gitAddVersionTag = (version: string) => {
-    const gitSubmitMessasge = `build：修改版本号为${version}`;
-    const shellExec = `git add . && git commit -m "${gitSubmitMessasge}"`;
+const gitAddVersionTag = (version: string, isNoPushCode: boolean) => {
+    if (!isNoPushCode) {
+        const gitSubmitMessasge = `build：修改版本号为${version}`;
+        const shellExec = `git add . && git commit -m "${gitSubmitMessasge}"`;
 
-    const gitAddResult = shell.exec(shellExec, { silent: true });
-    if (gitAddResult.code !== 0) {
-        return Promise.reject(`${logSymbols.error}${chalk.yellow('git 提交失败' + gitAddResult.stderr)}`);
+        const gitAddResult = shell.exec(shellExec, { silent: true });
+        if (gitAddResult.code !== 0) {
+            return Promise.reject(`${logSymbols.error}${chalk.yellow('git 提交失败' + gitAddResult.stderr)}`);
+        }
     }
 
     // const getGitCommitList = gitAddResult.stdout.trim().split(gitSubmitMessasge)[0].trim().slice(1, -1);

@@ -12,29 +12,37 @@ import logSymbols from '../common/logSymbols';
 import { resolveApp } from '../common/removeDir';
 import { initPublishProps } from './initPublish';
 
-const editPwdVersion = async (props: initPublishProps, version: string) => {
+export const increateVersion = (props: initPublishProps, version: string) => {
     const { left, middle, right } = props;
-    const currentNodeRunDir = resolveApp(`./package.json`);
-    const pkg = await fs.readJson(currentNodeRunDir);
     const editVersion = version.trim();
     const editVersionList = editVersion.split('.');
+    let resultVersion = '';
 
     if (editVersion.length === 0) {
-        console.log(logSymbols.error, chalk.redBright('暂未获取到version。请修改！'));
+        console.log(logSymbols.error, chalk.redBright('暂未获取到version。请查看！'));
         return;
     }
 
     if (left) {
-        pkg['version'] = [String(Number(editVersionList[0]) + 1), '0', '0'].join('.');
+        resultVersion = [String(Number(editVersionList[0]) + 1), '0', '0'].join('.');
     }
 
     if (middle) {
-        pkg['version'] = [editVersionList[0], String(Number(editVersionList[1]) + 1), '0'].join('.');
+        resultVersion = [editVersionList[0], String(Number(editVersionList[1]) + 1), '0'].join('.');
     }
 
     if ((!left && !middle) || right) {
-        pkg['version'] = [editVersionList[0], editVersionList[1], String(Number(editVersionList[2]) + 1)].join('.');
+        resultVersion = [editVersionList[0], editVersionList[1], String(Number(editVersionList[2]) + 1)].join('.');
     }
+
+    return resultVersion;
+};
+
+const editPwdVersion = async (props: initPublishProps, version: string) => {
+    const currentNodeRunDir = resolveApp(`./package.json`);
+    const pkg = await fs.readJson(currentNodeRunDir);
+    const resultVersion = increateVersion(props, version);
+    pkg['version'] = resultVersion;
     await fs.writeJson(currentNodeRunDir, pkg, { spaces: 2 });
 
     return pkg['version'];

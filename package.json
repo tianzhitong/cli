@@ -1,12 +1,13 @@
 {
   "name": "tianzhitong-cli",
-  "version": "2.0.8",
+  "version": "2.0.9",
   "main": "./dist/index.js",
   "type": "module",
   "private": false,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "cross-env CLI_ENV=dev tsup --watch",
+    "watch": "chokidar 'dist/**/*' -c 'yalc push'",
     "build": "cross-env CLI_ENV=production tsup",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
@@ -35,6 +36,7 @@
     "@types/fs-extra": "^11.0.4",
     "@types/node": "^22.10.5",
     "@types/shelljs": "^0.8.15",
+    "chokidar-cli": "^3.0.0",
     "cross-env": "^7.0.3",
     "eslint": "^9.17.0",
     "eslint-config-prettier": "^9.1.0",
@@ -46,13 +48,16 @@
     "typescript-eslint": "^8.19.1"
   },
   "dependencies": {
+    "@google-cloud/local-auth": "^3.0.1",
     "axios": "^1.7.9",
     "chalk": "^5.4.1",
+    "cheerio": "^1.0.0",
     "commander": "^13.0.0",
     "download-git-repo": "^3.0.2",
     "ejs": "^3.1.10",
     "figlet": "^1.8.0",
     "fs-extra": "^11.2.0",
+    "googleapis": "^148.0.0",
     "inquirer": "^12.3.0",
     "ora": "^8.1.1",
     "shelljs": "^0.8.5",

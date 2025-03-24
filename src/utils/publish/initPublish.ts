@@ -29,7 +29,7 @@ const initPublish = async (props: initPublishProps) => {
         // 【3】发布npm
         await npmPublish();
         // 【4】git添加tag信息
-        await gitAddVersionTag(editAfterVersion);
+        await gitAddVersionTag(editAfterVersion, false);
         // 退出程序
         shelljs.exit(1);
     } catch (ex) {

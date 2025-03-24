@@ -19,6 +19,7 @@ import apiGenTs from './utils/apiGenTs';
 import nrmCommand from './utils/nrm';
 import { configProps } from '../apiGenTs';
 import rnPushGitVersionTag from './utils/rnPushGitVersionTag';
+import rnIncreateAddVersion from './utils/rnIncreateAddVersion';
 export type GlobalConfigProps = configProps;
 
 program.version(CLI_VERSION, '-v --version');
@@ -74,6 +75,7 @@ program
     .action(initPublish);
 
 program.command('rnPushGitVersionTag').description('查看android版本并git tag提交').action(rnPushGitVersionTag);
+program.command('rnIncreateAddVersion').description('递增rn版本号').action(rnIncreateAddVersion);
 
 program.command('apiGenTs').description('根据接口配置文件动态生成ts').action(apiGenTs);
 

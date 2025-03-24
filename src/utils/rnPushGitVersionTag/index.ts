@@ -16,7 +16,7 @@ const rnPushGitVersionTag = async () => {
             throw new Error(`获取android版本号失败！`);
         }
         const versionName = match[1];
-        await gitAddVersionTag(versionName);
+        await gitAddVersionTag(versionName, true);
         console.log(`${logSymbols.success}${chalk.green('执行成功 -> 查看android版本号并git tag提交成功！')}`);
     } catch (ex) {
         console.log(`${logSymbols.error}${chalk.yellow('执行失败 -> ' + String(ex))}`);
