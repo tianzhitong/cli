@@ -1,3 +1,11 @@
+/*
+ * @Author: tianzhitong rabiakilic833827@gmail.com
+ * @Date: 2025-04-18 14:43:12
+ * @LastEditors: tianzhitong rabiakilic833827@gmail.com
+ * @LastEditTime: 2025-04-18 15:02:57
+ * @FilePath: /cli/src/utils/rnIncreateAddVersion/iosVersionEdit.ts
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ */
 import fs from 'fs-extra';
 import { resolveApp } from '../common/removeDir';
 import axios from 'axios';
@@ -17,13 +25,19 @@ const iosVersionEdit = async (pkg: any) => {
         MARKETING_VERSION: '',
         CURRENT_PROJECT_VERSION: 0,
     };
-    // 获取ios的版本号
-    const curl = `https://apps.apple.com/us/app/flare-short/id${appleId}`;
-    const { data } = await axios.get(curl);
-    const $ = cheerio.load(data);
-    const versionText = $('p[class="l-column small-6 medium-12 whats-new__latest__version"]').text();
+
+    const iosVersion = await (async () => {
+        if (!appleId) {
+            return '1.0.0';
+        }
+        // 获取ios的版本号
+        const curl = `https://apps.apple.com/us/app/flare-short/id${appleId}`;
+        const { data } = await axios.get(curl);
+        const $ = cheerio.load(data);
+        const versionText = $('p[class="l-column small-6 medium-12 whats-new__latest__version"]').text();
+        return versionText.split('Version')[1].trim();
+    })();
     // ios应用市场的版本号
-    const iosVersion = versionText.split('Version')[1].trim();
     if ((iosVersion ?? '').length === 0) {
         throw new Error(`获取ios版本号失败！`);
     }
@@ -37,7 +51,9 @@ const iosVersionEdit = async (pkg: any) => {
 
     const currentProjectVersion = Number(currentProjectVersionMatches[0][1]);
 
-    lastUseVersionInfo.MARKETING_VERSION = increateVersion({ right: true, left: false, middle: false }, iosVersion);
+    lastUseVersionInfo.MARKETING_VERSION = appleId
+        ? increateVersion({ right: true, left: false, middle: false }, iosVersion)
+        : '1.0.0';
     lastUseVersionInfo.CURRENT_PROJECT_VERSION = currentProjectVersion + 1;
     // 更新所有匹配项（通常Debug和Release配置都需要更新）
     iosVersionContent = iosVersionContent.replace(
