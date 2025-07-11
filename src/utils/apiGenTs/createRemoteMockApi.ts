@@ -37,14 +37,21 @@ export const createRemoteMockApi = async (
                     const completeURL = apiUrl + method;
                     apiRefDeepMap[completeURL] = {};
                     const response200Res = apis[apiUrl][method]['responses']?.['200'];
-                    const response = apis[apiUrl][method]['responses']?.['200']?.content?.['application/json'];
-                    if (response200Res) {
-                        const item = response200Res.schema;
+                    const keyValueList = Object.keys(apis[apiUrl][method]['responses']?.['200']?.content ?? {});
+
+                    const response = apis[apiUrl][method]['responses']?.['200']?.content?.['application/json']
+                        ? apis[apiUrl][method]['responses']?.['200']?.content?.['application/json']
+                        : keyValueList.length === 1
+                          ? apis[apiUrl][method]['responses']?.['200']?.content?.[keyValueList[0]]
+                          : apis[apiUrl][method]['responses']?.['200']?.content?.['application/json'];
+
+                    if (response200Res || response) {
+                        const item = response200Res?.schema ? response200Res?.schema : response?.schema;
                         // 胜男apijson特殊操作
                         if (item?.['$ref']) {
                             const firstref = item['$ref'].split('/').filter((item) => item !== '#');
                             const firstStructData = getNestedData(getFilterApiData, firstref);
-                            if (firstStructData.type === 'object') {
+                            if (firstStructData?.type === 'object') {
                                 Object.keys(firstStructData?.properties ?? {}).forEach((key) => {
                                     responseToTockStructData[key] = progressModel(
                                         firstStructData.properties,
@@ -60,7 +67,7 @@ export const createRemoteMockApi = async (
                                     if (item['$ref']) {
                                         const firstref = item['$ref'].split('/').filter((item) => item !== '#');
                                         const firstStructData = getNestedData(getFilterApiData, firstref);
-                                        if (firstStructData.type === 'object') {
+                                        if (firstStructData?.type === 'object') {
                                             Object.keys(firstStructData?.properties ?? {}).forEach((key) => {
                                                 responseToTockStructData[key] = firstStructData.properties[key]['type'];
                                             });
@@ -79,7 +86,7 @@ export const createRemoteMockApi = async (
                                     }
                                 });
                             }
-                        } else if (item.type === 'object' && Object.keys(item.properties).length > 0) {
+                        } else if (item?.type === 'object' && Object.keys(item.properties).length > 0) {
                             Object.keys(item?.properties ?? {}).forEach((key) => {
                                 responseToTockStructData[key] = progressModel(
                                     item.properties,
