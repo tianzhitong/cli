@@ -96,5 +96,6 @@ const describeReturnType = () => {
         <%~ securityTmpl ? `secure: ${securityTmpl},` : '' %>
         <%~ bodyContentKindTmpl ? `type: ${bodyContentKindTmpl},` : '' %>
         <%~ responseFormatTmpl ? `format: ${responseFormatTmpl},` : '' %>
+        <%~ path.includes('{') ? 'useMapApi: true,' : '' %>
         ...<%~ _.get(requestConfigParam, "name") %>,
     })<%~ route.namespace ? ',' : '' %>
