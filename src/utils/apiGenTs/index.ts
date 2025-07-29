@@ -45,6 +45,11 @@ const apiGenTs = async () => {
         const mockApiMapData = new Map();
 
         const remoteSwaggerDataList = new Map();
+
+        // 添加mock 映射数据
+        let mockMapData = {};
+        let mockMapNum = 0;
+
         // 【2】根据配置文件来生成ts文件
         for (let index = 0; index < getConfigFileInfo.swaggerList.length; index++) {
             const swaggerSingInfo = getConfigFileInfo.swaggerList[index];
@@ -70,6 +75,29 @@ const apiGenTs = async () => {
                 fetchGetSwaggerData: getSwaggerSpecData,
                 baseSetUseApiList: swaggerSingInfo.apis,
             });
+
+            if (getConfigFileInfo?.mockServe?.enable) {
+                for (const key in getNewSpecToSwagger?.paths ?? {}) {
+                    if (key.includes('{')) {
+                        const element = getNewSpecToSwagger.paths[key];
+                        const keyList = Object.keys(element ?? {});
+                        if (keyList.length === 0) {
+                            continue;
+                        }
+
+                        keyList.forEach((requestMethod) => {
+                            mockMapNum++;
+                            const method = requestMethod.toUpperCase();
+                            if (Object.keys(mockMapData[method] ?? {}).length === 0) {
+                                mockMapData[method] = {};
+                            }
+
+                            const getApiBasePath = key.split('{')[0];
+                            mockMapData[method][getApiBasePath] = key;
+                        });
+                    }
+                }
+            }
 
             mockApiMapData.set(swaggerSingInfo.name, getNewSpecToSwagger);
 
@@ -111,6 +139,15 @@ const apiGenTs = async () => {
                 getConfigFileInfo.mockServe.projectName,
                 getConfigFileInfo.mockServe.modelData,
             );
+
+            if (mockMapNum > 0) {
+                fs.writeJsonSync(resolveApp('./apiGenTs.map.json'), mockMapData, {
+                    spaces: 4,
+                });
+                console.log(logSymbols.success, chalk.green(`生成映射json成功！`));
+            }else {
+                fs.removeSync(resolveApp('./apiGenTs.map.json'));
+            }
             console.log(logSymbols.success, chalk.green(`push mock api to serve 成功！`));
         }
     } catch (ex) {

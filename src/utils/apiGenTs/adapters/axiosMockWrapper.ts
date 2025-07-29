@@ -10,10 +10,10 @@
 import { InternalAxiosRequestConfig } from 'axios';
 
 interface MOCK_API_MAP_Props {
-    GET?: Array<Record<string, string>>;
-    POST?: Array<Record<string, string>>;
-    PUT?: Array<Record<string, string>>;
-    DELETE?: Array<Record<string, string>>;
+    GET?: Record<string, string>;
+    POST?: Record<string, string>;
+    PUT?: Record<string, string>;
+    DELETE?: Record<string, string>;
 }
 interface mockConfigProps {
     /** mock项目的名字 */
@@ -25,28 +25,32 @@ interface mockConfigProps {
     MOCK_API_MAP?: MOCK_API_MAP_Props;
 }
 
-
-const progressApiMapToServiceApiUrl = (currentApiUrl: string,apiMethod: string, MOCK_API_MAP: MOCK_API_MAP_Props,useMapApi: boolean) => {
-    if(!useMapApi) {
+const progressApiMapToServiceApiUrl = (
+    currentApiUrl: string,
+    apiMethod: string,
+    MOCK_API_MAP: MOCK_API_MAP_Props,
+    useMapApi: boolean,
+) => {
+    if (!useMapApi) {
         return currentApiUrl;
     }
     const mapApiListByApiMethod = MOCK_API_MAP[apiMethod as keyof MOCK_API_MAP_Props];
-    if(mapApiListByApiMethod.length === 0) {
+    const keyLength = Object.keys(mapApiListByApiMethod ?? {}).length;
+    if (keyLength === 0) {
         return currentApiUrl;
     }
 
-    for(let i = 0; i < mapApiListByApiMethod.length; i++) {
-        const item = mapApiListByApiMethod[i];
-        const keyList = Object.keys(item);
-        if(keyList.length === 1) {
-            if(currentApiUrl.includes(keyList[0])) {
-                return item[keyList[0]];
+    for (const key in mapApiListByApiMethod) {
+        if (Object.prototype.hasOwnProperty.call(mapApiListByApiMethod, key)) {
+            const element = mapApiListByApiMethod[key];
+            if (currentApiUrl.includes(key)) {
+                return element;
             }
         }
     }
 
     return currentApiUrl;
-}
+};
 
 export const axiosMockWrapper = (config: InternalAxiosRequestConfig, mockConfig: mockConfigProps) => {
     const { removePrefix, projectName = 'default', mockBaseUrl, MOCK_API_MAP = {} } = mockConfig;
@@ -66,7 +70,7 @@ export const axiosMockWrapper = (config: InternalAxiosRequestConfig, mockConfig:
     if ((removePrefix ?? '').length > 0) {
         queryPath = queryPath.replace(removePrefix, '');
     }
-    queryPath = progressApiMapToServiceApiUrl(queryPath,apiMethod,MOCK_API_MAP,useMapApi);
+    queryPath = progressApiMapToServiceApiUrl(queryPath, apiMethod, MOCK_API_MAP, useMapApi);
 
     config.headers['Mock-Query-Path'] = queryPath;
     config.baseURL = `${mockBaseUrl}/mock/mock/clientGetMockData?apiUrl=${queryPath}&projectName=${projectName}&apiMethod=${apiMethod}`;
