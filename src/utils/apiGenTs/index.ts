@@ -139,16 +139,13 @@ const apiGenTs = async () => {
                 getConfigFileInfo.mockServe.projectName,
                 getConfigFileInfo.mockServe.modelData,
             );
-
-            if (mockMapNum > 0) {
-                fs.writeJsonSync(resolveApp('./apiGenTs.map.json'), mockMapData, {
-                    spaces: 4,
-                });
-                console.log(logSymbols.success, chalk.green(`生成映射json成功！`));
-            }else {
-                fs.removeSync(resolveApp('./apiGenTs.map.json'));
-            }
+            fs.writeJsonSync(resolveApp('./apiGenTs.map.json'), mockMapData, {
+                spaces: 4,
+            });
+            console.log(logSymbols.success, chalk.green(`生成映射json成功！`));
             console.log(logSymbols.success, chalk.green(`push mock api to serve 成功！`));
+        }else {
+            fs.removeSync(resolveApp('./apiGenTs.map.json'));
         }
     } catch (ex) {
         console.log(String(ex));
