@@ -23,7 +23,7 @@ export const Api = {
 <% }) %>
 };
 
-const warpperServiceConfig = (apiConfig: serviceConfigProps, ctx: warpperServiceConfigProps) => {
+export const warpperServiceConfig = (apiConfig: serviceConfigProps, ctx: warpperServiceConfigProps) => {
     const newConfig = { ...apiConfig };
     if (newConfig.baseURL) {
         newConfig.baseURL = newConfig.baseURL + ctx.basePath;
