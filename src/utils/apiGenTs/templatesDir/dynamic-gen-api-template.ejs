@@ -35,6 +35,11 @@ export const warpperServiceConfig = (apiConfig: serviceConfigProps, ctx: warpper
 const <%= item.name %> = new <%= toUpperCase(item.name) %>(warpperServiceConfig(serviceConfig, { name: '<%= item.name %>', basePath: '<%= item.basePath %>' }));
 <% }) %>
 
+
+<% apiNames.forEach((item) => { %>
+export const <%= item.name %>AxiosGen = () => new <%= toUpperCase(item.name) %>(warpperServiceConfig(serviceConfig, { name: '<%= item.name %>', basePath: '<%= item.basePath %>' }));
+<% }) %>
+
 export const apiInstanceList = [
 <% apiNames.forEach((item) => { %>
     { key: '<%= item.name %>', instance: <%= item.name %> },
