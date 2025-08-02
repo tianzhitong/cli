@@ -1,5 +1,5 @@
 <%
-const { routeInfo, utils } = it;
+const { routeInfo, utils, config } = it;
 const {
   operationId,
   method,
@@ -12,6 +12,7 @@ const {
   pathArgs,
 } = routeInfo;
 const { _, fmtToJSDocLine, require } = utils;
+const { useMethodByPath } = config;
 
 //const methodAliases = {
 //  get: (pathName, hasPathInserts) =>
@@ -23,11 +24,11 @@ const { _, fmtToJSDocLine, require } = utils;
 //}
 
 const methodAliases = {
-    get: (pathName, hasPathInserts) => _.camelCase(`${pathName}`),
-    post: (pathName, hasPathInserts) => _.camelCase(`${pathName}`),
-    put: (pathName, hasPathInserts) => _.camelCase(`${pathName}`),
-    patch: (pathName, hasPathInserts) => _.camelCase(`${pathName}`),
-    delete: (pathName, hasPathInserts) => _.camelCase(`${pathName}`),
+    get: (pathName, hasPathInserts) => _.camelCase(useMethodByPath ? `${pathName}Get` : `${pathName}`),
+    post: (pathName, hasPathInserts) => _.camelCase(useMethodByPath ? `${pathName}Post` : `${pathName}`),
+    put: (pathName, hasPathInserts) => _.camelCase(useMethodByPath ? `${pathName}Put` : `${pathName}`),
+    patch: (pathName, hasPathInserts) => _.camelCase(useMethodByPath ? `${pathName}Patch` : `${pathName}`),
+    delete: (pathName, hasPathInserts) => _.camelCase(useMethodByPath ? `${pathName}Delete` : `${pathName}`),
 };
 
 const createCustomOperationId = (method, route, moduleName) => {

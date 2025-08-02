@@ -77,7 +77,7 @@ program
 program.command('rnPushGitVersionTag').description('查看android版本并git tag提交').action(rnPushGitVersionTag);
 program.command('rnIncreateAddVersion').description('递增rn版本号').action(rnIncreateAddVersion);
 
-program.command('apiGenTs').description('根据接口配置文件动态生成ts').action(apiGenTs);
+program.command('apiGenTs').description('根据接口配置文件动态生成ts').option('-m, --useMethodByPath', '使用方法作为路径参数').action(apiGenTs);
 
 program.command('nrm <command>').description('切换npm源').action(nrmCommand);
 

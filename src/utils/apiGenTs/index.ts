@@ -22,7 +22,8 @@ import initConfigFileToProject from './createFileToProject';
 import getGenErrorApi from './getGenErrorApi';
 import { createRemoteMockApi } from './createRemoteMockApi';
 
-const apiGenTs = async () => {
+const apiGenTs = async (options: { useMethodByPath: boolean }) => {
+    const useMethodByPath = options.useMethodByPath;
     try {
         const path = fs.existsSync(resolveApp('./apiGenTs.config.js'))
             ? resolveApp('./apiGenTs.config.js')
@@ -42,6 +43,7 @@ const apiGenTs = async () => {
             throw new Error(`${logSymbols.error}${chalk.yellow('获取swaggerList属性失败！')}`);
         }
 
+        // 过滤不使用的接口
         const mockApiMapData = new Map();
 
         const remoteSwaggerDataList = new Map();
@@ -113,6 +115,7 @@ const apiGenTs = async () => {
                 httpClientType: 'axios',
                 templates: templatesDirAddress,
                 url: swaggerSingInfo.url,
+                useMethodByPath
             });
         }
 
