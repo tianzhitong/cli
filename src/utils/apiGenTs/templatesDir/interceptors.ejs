@@ -8,6 +8,8 @@
  */
 import { AxiosResponse } from 'axios';
 import { api, apiInstanceList } from '../../service';
+<% if (mockEnable) { %>import { axiosMockWrapper } from 'tianzhitong-cli/dist/adapters'; <% } %>
+<% if (mockEnable) { %>import MOCK_API_MAP from '<%= outMapJsonPath %>'; <% } %>
 
 // Wrapper function to set request headers
 const wrapperRequestHeader = (config: any) => {
@@ -29,6 +31,16 @@ const responseInterceptor = async (response: AxiosResponse<any, any>) => {
 apiInstanceList.forEach(async (item) => {
     item.instance.instance.interceptors.request.use(async (config) => {
         wrapperRequestHeader(config);
+        <% if (mockEnable) { %>
+        axiosMockWrapper(config, {
+            projectName: '<%= projectName %>',
+            // 替换为部署服务的地址
+            mockBaseUrl: '<%= mockBaseUrl %>',
+            // 如需去掉接口前缀。请设置
+            removePrefix: '',
+            MOCK_API_MAP,
+        });
+        <% } %>
         return config;
     });
     item.instance.instance.interceptors.response.use(responseInterceptor, function (error) {

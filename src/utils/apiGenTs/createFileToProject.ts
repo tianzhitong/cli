@@ -11,6 +11,9 @@ import { join, resolve } from 'node:path';
 import { CURRENT_FILE_PATH } from '../../config/const';
 import { resolveApp } from '../common/removeDir';
 import fs, { copy } from 'fs-extra';
+import { fileURLToPath } from 'node:url';
+import { mockServeProps } from '../../../apiGenTs';
+import ejs from 'ejs';
 
 // 创建baseUrl配置文件到项目里去
 const createRequestSwaggerServiceConfigFile = async (pathPrefix: string) => {
@@ -25,17 +28,28 @@ const createRequestSwaggerServiceConfigFile = async (pathPrefix: string) => {
     await copy(templateRequestPath, projectConfigFilePath);
 };
 
-const createRequestInterceptorsConfigFile = async (pathPrefix: string) => {
+const createRequestInterceptorsConfigFile = async (pathPrefix: string,mockServe:mockServeProps) => {
     const path = join(pathPrefix, 'interceptors.ts');
     const projectConfigFilePath = resolveApp(path);
     const exist = fs.existsSync(projectConfigFilePath);
+    const outdirPath = (mockServe?.outDir ?? '').endsWith('/') ? mockServe.outDir : `${mockServe.outDir}/`;
+    const outMapJsonPath = outdirPath.split('/').filter(item => item !== '').map(item =>  '../').join('') +'apiGenTs.map.json';
     // 如果存在那么不创建
     if (exist) {
         return;
     }
 
-    const templateRequestPath = resolve(CURRENT_FILE_PATH, '../runProjectTemplate/interceptors.ts');
-    await copy(templateRequestPath, projectConfigFilePath);
+    // TODO：根据参数来判断是否开启mock功能
+    const dynamicGenPath = resolve(fileURLToPath(import.meta.url), '../templatesDir/interceptors.ejs');
+    const dynamicEjsFileContent = fs.readFileSync(dynamicGenPath);
+
+    const dynamicGenJsFile = ejs.render(String(dynamicEjsFileContent), {
+        mockEnable: mockServe.enable,
+        projectName: mockServe.projectName,
+        mockBaseUrl: mockServe.url,
+        outMapJsonPath,
+    });
+    fs.writeFileSync(projectConfigFilePath, String(dynamicGenJsFile));
 };
 
 const createRequestIndexFileToProject = async (pathPrefix: string) => {
@@ -50,9 +64,9 @@ const createRequestIndexFileToProject = async (pathPrefix: string) => {
     await copy(templateRequestPath, projectConfigFilePath);
 };
 
-const initConfigFileToProject = async (pathPrefix: string) => {
+const initConfigFileToProject = async (pathPrefix: string,mockServe:mockServeProps) => {
     await createRequestSwaggerServiceConfigFile(pathPrefix);
-    await createRequestInterceptorsConfigFile(pathPrefix);
+    await createRequestInterceptorsConfigFile(pathPrefix,mockServe);
     await createRequestIndexFileToProject(pathPrefix);
 };
 

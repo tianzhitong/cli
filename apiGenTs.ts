@@ -36,6 +36,8 @@ export interface mockServeProps {
     projectName?: string;
     /** 模型数据。最外层的数据 code。message之类 */
     modelData?: object;
+    /** 生成的接口文件扔到那个目录下 默认为./src/service/下 */
+    outDir?: string;
 }
 
 export interface configProps {

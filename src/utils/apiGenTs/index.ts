@@ -126,7 +126,10 @@ const apiGenTs = async (options: { useMethodByPath: boolean }) => {
         createManyServiceFileBySwaggler(getConfigFileInfo?.swaggerList, outApiDirPath);
 
         // 创建配置文件到项目里去
-        await initConfigFileToProject(resolve(outApiDirPath, `../${API_CONFIG_BASE_URL_FILE}`));
+        await initConfigFileToProject(resolve(outApiDirPath, `../${API_CONFIG_BASE_URL_FILE}`),{
+            ...getConfigFileInfo?.mockServe,
+            outDir,
+        });
         console.log(logSymbols.success, chalk.green(`动态生成ts文件成功！`));
 
         if (getConfigFileInfo?.mockServe?.enable) {
