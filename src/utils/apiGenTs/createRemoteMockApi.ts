@@ -74,7 +74,7 @@ export const createRemoteMockApi = async (
                                         }
                                     }
                                     if (item['properties']) {
-                                        Object.keys(item['properties']).forEach((key) => {
+                                        Object.keys(item['properties'] ?? {}).forEach((key) => {
                                             const result = progressModel(
                                                 item['properties'],
                                                 key,
@@ -169,7 +169,7 @@ const progressModel = (data: any, parentKey: string, getFilterApiData: any, comp
             }
             const firstref = data?.[parentKey]?.['$ref'].split('/').filter((item) => item !== '#');
             const firstStructData = getNestedData(getFilterApiData, firstref);
-            Object.keys(firstStructData['properties']).forEach((key) => {
+            Object.keys(firstStructData['properties'] ?? {}).forEach((key) => {
                 const currentKeyValue = progressModel(
                     firstStructData['properties'],
                     key,
@@ -182,7 +182,7 @@ const progressModel = (data: any, parentKey: string, getFilterApiData: any, comp
         } else if (!data[parentKey]?.['properties']) {
             return result;
         }
-        Object.keys(data[parentKey]['properties']).forEach((key) => {
+        Object.keys(data[parentKey]['properties'] ?? {}).forEach((key) => {
             if (!result[parentKey]) {
                 result[parentKey] = {};
             }
@@ -210,7 +210,7 @@ const progressModel = (data: any, parentKey: string, getFilterApiData: any, comp
             }
             // TODO:此处需要在看。因为递归原因，导致内存爆了。
             const firstStructData = getNestedData(getFilterApiData, firstref);
-            Object.keys(firstStructData['properties']).forEach((key) => {
+            Object.keys(firstStructData['properties'] ?? {}).forEach((key) => {
                 result[parentKey][0][key] = progressModel(
                     firstStructData['properties'],
                     key,
@@ -226,7 +226,7 @@ const progressModel = (data: any, parentKey: string, getFilterApiData: any, comp
             const firstref = items?.['items']?.['$ref'].split('/').filter((item) => item !== '#');
             // TODO:此处需要在看。因为递归原因，导致内存爆了。
             const firstStructData = getNestedData(getFilterApiData, firstref);
-            Object.keys(firstStructData['properties']).forEach((key) => {
+            Object.keys(firstStructData['properties'] ?? {}).forEach((key) => {
                 result[parentKey][key] = progressModel(
                     firstStructData['properties'],
                     key,
@@ -251,7 +251,7 @@ const progressModel = (data: any, parentKey: string, getFilterApiData: any, comp
             if (!result[parentKey]) {
                 result[parentKey] = [{}];
             }
-            Object.keys(firstStructData['properties']).forEach((key) => {
+            Object.keys(firstStructData['properties'] ?? {}).forEach((key) => {
                 result[parentKey][0][key] = progressModel(
                     firstStructData['properties'],
                     key,
@@ -266,7 +266,7 @@ const progressModel = (data: any, parentKey: string, getFilterApiData: any, comp
             if (!result[parentKey]) {
                 result[parentKey] = [{}];
             }
-            Object.keys(items['properties']).forEach((key) => {
+            Object.keys(items['properties'] ?? {}).forEach((key) => {
                 result[parentKey][0][key] = progressModel(items['properties'], key, getFilterApiData, completeURL);
             });
             return result[parentKey];
