@@ -59,7 +59,11 @@ const apiGenTs = async (options: { useMethodByPath: boolean }) => {
             // 远程api接口的配置文件
             let getSwaggerSpecData: any;
             if (swaggerSingInfo.url.includes('http')) {
-                getSwaggerSpecData = await fetch(swaggerSingInfo.url)
+                const headers = swaggerSingInfo['headers'] ?? {};
+                getSwaggerSpecData = await fetch(swaggerSingInfo.url,{
+                    method: 'GET',
+                    headers
+                })
                     .then((data) => data.json())
                     .catch(() => {
                         throw new Error(
